@@ -3,6 +3,9 @@
 DayZ inspired
 
 ## Overview
+Credits go to SamSwat for the original creation of this mod! https://dev.sp-tarkov.com/SamSWAT/HelicopterCrashSites & https://hub.sp-tarkov.com/files/file/659-helicopter-crash-sites
+
+## Overview
 
 BepInEx plugin that will add random helicopter crash sites. The initial chance is 10%, but it can be adjusted in the configuration manager (`F12` key) or alternatively, if you've launched up the game at least once with this mod, you can find the `com.SamSWAT.HeliCrash.cfg` file in your `BepInEx/config/` folder and change value there.
 
