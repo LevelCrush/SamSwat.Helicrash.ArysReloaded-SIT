@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SamSWAT.HeliCrash.TyrianReboot
+namespace SamSWAT.HeliCrash.ArysReloaded
 {
     internal static class BlessRNG
     {

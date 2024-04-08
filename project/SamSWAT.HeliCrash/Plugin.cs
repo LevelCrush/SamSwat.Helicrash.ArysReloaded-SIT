@@ -1,20 +1,20 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
+using BepInEx.Logging;
 using Newtonsoft.Json;
 using System.IO;
 using System.Reflection;
-using BepInEx.Logging;
 
-namespace SamSWAT.HeliCrash.TyrianReboot
+namespace SamSWAT.HeliCrash.ArysReloaded
 {
-    [BepInPlugin("com.SamSWAT.HeliCrash.TyrianReboot", "SamSWAT.HeliCrash.TyrianReboot", "2.2.0")]
+    [BepInPlugin("com.SamSWAT.HeliCrash.ArysReloaded", "SamSWAT.HeliCrash.ArysReloaded", "2.2.1")]
     public class Plugin : BaseUnityPlugin
     {
         internal static HeliCrashLocations HeliCrashLocations;
         internal static string Directory;
         internal static ConfigEntry<int> HeliCrashChance;
         internal static ManualLogSource LogSource;
-        
+
         private void Awake()
         {
             LogSource = Logger;
@@ -27,7 +27,7 @@ namespace SamSWAT.HeliCrash.TyrianReboot
                 "Main Settings",
                 "Helicopter crash site chance",
                 10,
-                new ConfigDescription("Chance of helicopter crash site appearance in percentages",
+                new ConfigDescription("Percent chance of helicopter crash site appearance",
                 new AcceptableValueRange<int>(0, 100)));
         }
     }

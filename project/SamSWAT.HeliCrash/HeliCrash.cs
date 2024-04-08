@@ -1,12 +1,14 @@
-﻿using Comfort.Common;
+﻿using Aki.Custom.Airdrops.Models;
+using Aki.Custom.Airdrops.Utils;
+using Comfort.Common;
 using EFT;
 using EFT.Interactive;
+using EFT.UI;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Aki.Custom.Airdrops.Utils;
 using UnityEngine;
-using Aki.Custom.Airdrops.Models;
 
-namespace SamSWAT.HeliCrash.TyrianReboot
+namespace SamSWAT.HeliCrash.ArysReloaded
 {
     public class HeliCrash : MonoBehaviour
     {
@@ -15,14 +17,17 @@ namespace SamSWAT.HeliCrash.TyrianReboot
         public async void Init(string location)
         {
             var heliLocation = GetHeliCrashLocation(location);
+#if DEBUG
+            ConsoleScreen.Log($"Heli crash site spawned at position x: {heliLocation.Position.x}, y: {heliLocation.Position.y}, z: {heliLocation.Position.z}");
+#endif
             var choppa = Instantiate(await LoadChoppaAsync(), heliLocation.Position, Quaternion.Euler(heliLocation.Rotation));
             var container = choppa.GetComponentInChildren<LootableContainer>();
 
-            // New code for 3.7.1
-            AirdropLootResultModel lootResult = new ItemFactoryUtil().GetLoot();
-            var itemCrate = Utils.CreateItem("goofyahcontainer", "6223349b3136504a544d1608");
+            var itemFactoryUtil = new ItemFactoryUtil();
+            AirdropLootResultModel lootResult = itemFactoryUtil.GetLoot();
+            var itemCrate = Singleton<ItemFactory>.Instance.CreateItem("goofyahcontainer", "6223349b3136504a544d1608", null);
             LootItem.CreateLootContainer(container, itemCrate, "Heavy crate", Singleton<GameWorld>.Instance);
-            new ItemFactoryUtil().AddLoot(container, lootResult);
+            itemFactoryUtil.AddLoot(container, lootResult);
         }
 
         private void OnDestroy()
@@ -30,49 +35,49 @@ namespace SamSWAT.HeliCrash.TyrianReboot
             _heliBundle.Unload(true);
         }
 
-        private Location GetHeliCrashLocation(string location)
+        private Location GetHeliCrashLocation(string map)
         {
-            switch (location)
+            List<Location> location;
+
+            switch (map.ToLower())
             {
                 case "bigmap":
-                    {
-                        return Plugin.HeliCrashLocations.Customs.Shuffle().SelectRandom();
-                    }
-                case "Interchange":
-                    {
-                        return Plugin.HeliCrashLocations.Interchange.Shuffle().SelectRandom();;
-                    }
-                case "RezervBase":
-                    {
-                        return Plugin.HeliCrashLocations.Rezerv.Shuffle().SelectRandom();;
-                    }
-                case "Shoreline":
-                    {
-                        return Plugin.HeliCrashLocations.Shoreline.Shuffle().SelectRandom();;
-                    }
-                case "Woods":
-                    {
-                        return Plugin.HeliCrashLocations.Woods.Shuffle().SelectRandom();;
-                    }
-                case "Lighthouse":
-                    {
-                        return Plugin.HeliCrashLocations.Lighthouse.Shuffle().SelectRandom();;
-                    }
-                case "TarkovStreets":
-                    {
-                        return Plugin.HeliCrashLocations.StreetsOfTarkov.Shuffle().SelectRandom();;
-                    }
+                    location = Plugin.HeliCrashLocations.Customs;
+                    break;
+                case "interchange":
+                    location = Plugin.HeliCrashLocations.Interchange;
+                    break;
+                case "rezervbase":
+                    location = Plugin.HeliCrashLocations.Rezerv;
+                    break;
+                case "shoreline":
+                    location = Plugin.HeliCrashLocations.Shoreline;
+                    break;
+                case "woods":
+                    location = Plugin.HeliCrashLocations.Woods;
+                    break;
+                case "lighthouse":
+                    location = Plugin.HeliCrashLocations.Lighthouse;
+                    break;
+                case "tarkovstreets":
+                    location = Plugin.HeliCrashLocations.StreetsOfTarkov;
+                    break;
+                case "sandbox":
+                    location = Plugin.HeliCrashLocations.GroundZero;
+                    break;
                 case "develop":
-                    {
-                        return Plugin.HeliCrashLocations.Develop.Shuffle().SelectRandom();;
-                    }
-                default: return new Location();
+                    location = Plugin.HeliCrashLocations.Develop;
+                    break;
+                default:
+                    return new Location();
             }
+
+            return location.Shuffle().SelectRandom();
         }
 
         private async Task<GameObject> LoadChoppaAsync()
         {
-            var path = $"{Plugin.Directory}/Assets/Content/Vehicles/sikorsky_uh60_blackhawk.bundle";
+            var path = $"{Plugin.Directory}/sikorsky_uh60_blackhawk.bundle";
 
             var bundleLoadRequest = AssetBundle.LoadFromFileAsync(path);
 
@@ -84,7 +89,7 @@ namespace SamSWAT.HeliCrash.TyrianReboot
             if (_heliBundle == null)
             {
                 Plugin.LogSource.LogFatal("Can't load UH-60 Blackhawk bundle");
-                Debug.LogError("[SamSWAT.HeliCrash.TyrianReboot]: Can't load UH-60 Blackhawk bundle");
+                Debug.LogError("[SamSWAT.HeliCrash.ArysReloaded]: Can't load UH-60 Blackhawk bundle");
                 return null;
             }
 
@@ -96,9 +101,9 @@ namespace SamSWAT.HeliCrash.TyrianReboot
             var requestedGo = assetLoadRequest.allAssets[0] as GameObject;
 
             if (requestedGo != null) return requestedGo;
-            
+
             Plugin.LogSource.LogFatal("Failed to load heli asset");
-            Debug.LogError("[SamSWAT.HeliCrash.TyrianReboot]: failed to load heli asset");
+            Debug.LogError("[SamSWAT.HeliCrash.ArysReloaded]: Failed to load heli asset");
             return null;
 
         }

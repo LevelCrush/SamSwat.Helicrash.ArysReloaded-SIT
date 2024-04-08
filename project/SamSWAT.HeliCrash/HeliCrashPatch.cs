@@ -1,28 +1,27 @@
 ﻿using Aki.Reflection.Patching;
-using Comfort.Common;
 using EFT;
 using EFT.Airdrop;
+using HarmonyLib;
 using System.Linq;
 using System.Reflection;
 
-namespace SamSWAT.HeliCrash.TyrianReboot
+namespace SamSWAT.HeliCrash.ArysReloaded
 {
     public class HeliCrashPatch : ModulePatch
     {
         protected override MethodBase GetTargetMethod()
         {
-            //return PatchConstants.LocalGameType.BaseType.GetMethod("method_10", BindingFlags.NonPublic | BindingFlags.Instance);
-            return typeof(GameWorld).GetMethod(nameof(GameWorld.OnGameStarted));
+            return AccessTools.Method(typeof(GameWorld), nameof(GameWorld.OnGameStarted));
         }
 
         [PatchPostfix]
-        public static void PatchPostfix()
+        public static void PatchPostfix(GameWorld __instance)
         {
-            var gameWorld = Singleton<GameWorld>.Instance;
-            var crashAvailable = LocationScene.GetAll<AirdropPoint>().Any();
+            var gameWorld = __instance;
+            var crashAvailable = __instance.MainPlayer.Location.ToLower() == "sandbox" || LocationScene.GetAll<AirdropPoint>().Any();
             var location = gameWorld.MainPlayer.Location;
             
-            if (gameWorld == null || !crashAvailable || !BlessRNG.RngBool(Plugin.HeliCrashChance.Value)) return;
+            if (!crashAvailable || !BlessRNG.RngBool(Plugin.HeliCrashChance.Value)) return;
             
             var heliCrash = gameWorld.gameObject.AddComponent<HeliCrash>();
             heliCrash.Init(location);

@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32002.261
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamSWAT.HeliCrash.TyrianReboot", "SamSWAT.HeliCrash.TyrianReboot.csproj", "{108B64A1-AEFD-4660-9B8B-363B62CB9621}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamSWAT.HeliCrash.ArysReloaded", "SamSWAT.HeliCrash.ArysReloaded.csproj", "{108B64A1-AEFD-4660-9B8B-363B62CB9621}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +20,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {C9F16192-FFC1-4438-AB0A-29AE28DF7DE9}
+		SolutionGuid = {46CEABDB-1E53-47F1-AECD-BC14B91C463A}
 	EndGlobalSection
 EndGlobal

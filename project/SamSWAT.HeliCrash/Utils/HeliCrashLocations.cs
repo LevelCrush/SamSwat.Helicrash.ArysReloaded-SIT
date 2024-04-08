@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace SamSWAT.HeliCrash.TyrianReboot
+namespace SamSWAT.HeliCrash.ArysReloaded
 {
     public class Location
     {
@@ -18,6 +18,7 @@ namespace SamSWAT.HeliCrash.TyrianReboot
         public List<Location> Rezerv { get; set; }
         public List<Location> Shoreline { get; set; }
         public List<Location> StreetsOfTarkov { get; set; }
+        public List<Location> GroundZero { get; set; }
         public List<Location> Develop { get; set; }
     }
 }

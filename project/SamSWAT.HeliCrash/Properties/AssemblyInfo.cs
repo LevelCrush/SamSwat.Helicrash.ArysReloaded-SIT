@@ -1,16 +1,15 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // Общие сведения об этой сборке предоставляются следующим набором
 // набора атрибутов. Измените значения этих атрибутов для изменения сведений,
 // связанные со сборкой.
-[assembly: AssemblyTitle("SamSWAT.HeliCrash")]
+[assembly: AssemblyTitle("SamSWAT.HeliCrash.ArysReloaded")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SamSWAT.HeliCrash")]
-[assembly: AssemblyCopyright("Copyright © SamSWAT 2022")]
+[assembly: AssemblyProduct("SamSWAT.HeliCrash.ArysReloaded")]
+[assembly: AssemblyCopyright("Copyright © SamSWAT, Arys 2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
