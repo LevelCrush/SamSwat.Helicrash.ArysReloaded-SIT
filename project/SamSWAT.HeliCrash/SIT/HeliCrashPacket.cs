@@ -37,7 +37,7 @@ namespace SamSWAT.HeliCrash.ArysReloaded
             StayInTarkovHelperConstants.Logger.LogInfo($"{nameof(HeliCrashPacket)}:{Location}");
             writer.Write(Location.ToJson());
     
-            var loot_result = LootResult.ToJson();
+     
             StayInTarkovHelperConstants.Logger.LogInfo($"{nameof(HeliCrashPacket)}: Loot Json Generated");
             writer.Write(LootResult.ToJson());
             
