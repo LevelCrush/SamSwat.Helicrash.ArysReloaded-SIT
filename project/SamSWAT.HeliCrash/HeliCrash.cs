@@ -24,7 +24,7 @@ namespace SamSWAT.HeliCrash.ArysReloaded
             var container = choppa.GetComponentInChildren<LootableContainer>();
 
             var itemFactoryUtil = new ItemFactoryUtil();
-            AirdropLootResultModel lootResult = itemFactoryUtil.GetLoot();
+            AirdropLootResultModel lootResult = await itemFactoryUtil.GetLoot();
             var itemCrate = Singleton<ItemFactory>.Instance.CreateItem("goofyahcontainer", "6223349b3136504a544d1608", null);
             LootItem.CreateLootContainer(container, itemCrate, "Heavy crate", Singleton<GameWorld>.Instance);
             itemFactoryUtil.AddLoot(container, lootResult);
