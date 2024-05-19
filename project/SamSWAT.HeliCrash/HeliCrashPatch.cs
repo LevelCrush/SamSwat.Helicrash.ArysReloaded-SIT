@@ -8,6 +8,7 @@ using StayInTarkov;
 using StayInTarkov.Coop.Matchmaker;
 using StayInTarkov.Coop.SITGameModes;
 using StayInTarkov.Networking;
+using UnityEngine;
 using ModulePatch = Aki.Reflection.Patching.ModulePatch;
 
 namespace SamSWAT.HeliCrash.ArysReloaded
@@ -36,6 +37,7 @@ namespace SamSWAT.HeliCrash.ArysReloaded
 
                 if (generated_results != null)
                 {
+                  
                     StayInTarkovHelperConstants.Logger.LogInfo("Sending Helicrash Packet");
                     var packet = new HeliCrashPacket(Singleton<GameWorld>.Instance.MainPlayer.ProfileId);
                     packet.Location = generated_results.Item1;

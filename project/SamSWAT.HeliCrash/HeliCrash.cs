@@ -7,6 +7,9 @@ using EFT.Interactive;
 using EFT.UI;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using HarmonyLib;
+using StayInTarkov.AkiSupport.Airdrops;
+using StayInTarkov.Coop.Components.CoopGameComponents;
 using UnityEngine;
 
 namespace SamSWAT.HeliCrash.ArysReloaded
@@ -29,6 +32,11 @@ namespace SamSWAT.HeliCrash.ArysReloaded
             var itemCrate = Singleton<ItemFactory>.Instance.CreateItem("goofyahcontainer", "6223349b3136504a544d1608", null);
             LootItem.CreateLootContainer(container, itemCrate, "Heavy crate", Singleton<GameWorld>.Instance);
             itemFactoryUtil.AddLoot(container, lootResult);
+            
+            if (SITGameComponent.TryGetCoopGameComponent(out var coopGameComponent))
+            {
+                coopGameComponent.ListOfInteractiveObjects.AddItem(container);
+            }
             return new Tuple<Location, AirdropLootResultModel>(heliLocation, lootResult);
         }
 
