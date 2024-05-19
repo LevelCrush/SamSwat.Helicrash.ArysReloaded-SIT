@@ -19,6 +19,7 @@ namespace SamSWAT.HeliCrash.ArysReloaded
         {
             LogSource = Logger;
             Directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            new HeliCrashPacketPatch().Enable();
             new HeliCrashPatch().Enable();
             var json = File.ReadAllText($"{Directory}/HeliCrashLocations.json");
             HeliCrashLocations = JsonConvert.DeserializeObject<HeliCrashLocations>(json);

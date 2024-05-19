@@ -1,4 +1,5 @@
-﻿using Aki.Custom.Airdrops.Models;
+﻿using System;
+using Aki.Custom.Airdrops.Models;
 using Aki.Custom.Airdrops.Utils;
 using Comfort.Common;
 using EFT;
@@ -14,7 +15,7 @@ namespace SamSWAT.HeliCrash.ArysReloaded
     {
         private AssetBundle _heliBundle;
 
-        public async void Init(string location)
+        public async Task<Tuple<string, AirdropLootResultModel>> Init(string location,AirdropLootResultModel target_loot_result)
         {
             var heliLocation = GetHeliCrashLocation(location);
 #if DEBUG
@@ -24,10 +25,11 @@ namespace SamSWAT.HeliCrash.ArysReloaded
             var container = choppa.GetComponentInChildren<LootableContainer>();
 
             var itemFactoryUtil = new ItemFactoryUtil();
-            AirdropLootResultModel lootResult = await itemFactoryUtil.GetLoot();
+            var lootResult = target_loot_result == null ? await itemFactoryUtil.GetLoot() : target_loot_result;
             var itemCrate = Singleton<ItemFactory>.Instance.CreateItem("goofyahcontainer", "6223349b3136504a544d1608", null);
             LootItem.CreateLootContainer(container, itemCrate, "Heavy crate", Singleton<GameWorld>.Instance);
             itemFactoryUtil.AddLoot(container, lootResult);
+            return new Tuple<string, AirdropLootResultModel>(location, lootResult);
         }
 
         private void OnDestroy()
