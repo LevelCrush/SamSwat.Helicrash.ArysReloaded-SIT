@@ -15,9 +15,9 @@ namespace SamSWAT.HeliCrash.ArysReloaded
     {
         private AssetBundle _heliBundle;
 
-        public async Task<Tuple<string, AirdropLootResultModel>> Init(string location,AirdropLootResultModel target_loot_result)
+        public async Task<Tuple<Location, AirdropLootResultModel>> Init(string location,AirdropLootResultModel target_loot_result, Location heli_location)
         {
-            var heliLocation = GetHeliCrashLocation(location);
+            var heliLocation = heli_location == null ? GetHeliCrashLocation(location) : heli_location;
 #if DEBUG
             ConsoleScreen.Log($"Heli crash site spawned at position x: {heliLocation.Position.x}, y: {heliLocation.Position.y}, z: {heliLocation.Position.z}");
 #endif
@@ -29,7 +29,7 @@ namespace SamSWAT.HeliCrash.ArysReloaded
             var itemCrate = Singleton<ItemFactory>.Instance.CreateItem("goofyahcontainer", "6223349b3136504a544d1608", null);
             LootItem.CreateLootContainer(container, itemCrate, "Heavy crate", Singleton<GameWorld>.Instance);
             itemFactoryUtil.AddLoot(container, lootResult);
-            return new Tuple<string, AirdropLootResultModel>(location, lootResult);
+            return new Tuple<Location, AirdropLootResultModel>(heliLocation, lootResult);
         }
 
         private void OnDestroy()

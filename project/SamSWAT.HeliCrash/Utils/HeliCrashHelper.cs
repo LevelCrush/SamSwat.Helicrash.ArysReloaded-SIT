@@ -11,7 +11,7 @@ namespace SamSWAT.HeliCrash.ArysReloaded
 {
     public class HeliCrashHelper
     {
-        public static async Task<Tuple<string,AirdropLootResultModel>> Init(string target_location, AirdropLootResultModel loot_result)
+        public static async Task<Tuple<Location,AirdropLootResultModel>> Init(string target_location, AirdropLootResultModel loot_result, Location heli_location)
         {
             var __instance = Singleton<GameWorld>.Instance;
             
@@ -31,7 +31,7 @@ namespace SamSWAT.HeliCrash.ArysReloaded
            
             
             var heliCrash = gameWorld.gameObject.AddComponent<HeliCrash>();
-            return await heliCrash.Init(location, loot_result);
+            return await heliCrash.Init(location, loot_result, heli_location);
         }
     }
 }

@@ -32,7 +32,7 @@ namespace SamSWAT.HeliCrash.ArysReloaded
             {
                 // generate helicopter crash
                 StayInTarkovHelperConstants.Logger.LogInfo("Generating Helicopter Crash (if possible)");
-                var generated_results = await HeliCrashHelper.Init(Singleton<GameWorld>.Instance.MainPlayer.Location, null);
+                var generated_results = await HeliCrashHelper.Init(Singleton<GameWorld>.Instance.MainPlayer.Location, null, null);
 
                 if (generated_results != null)
                 {

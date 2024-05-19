@@ -13,7 +13,7 @@ namespace SamSWAT.HeliCrash.ArysReloaded
     public class HeliCrashPacket : BasePlayerPacket
     {
         
-        public string Location { get; set; }
+        public Location Location { get; set; }
         public AirdropLootResultModel LootResult { get; set; }
         
         public HeliCrashPacket()
@@ -35,10 +35,10 @@ namespace SamSWAT.HeliCrash.ArysReloaded
             WriteHeaderAndProfileId(writer);
 
             StayInTarkovHelperConstants.Logger.LogInfo($"{nameof(HeliCrashPacket)}:{Location}");
-            writer.Write(Location);
-
+            writer.Write(Location.ToJson());
+    
             var loot_result = LootResult.ToJson();
-            StayInTarkovHelperConstants.Logger.LogInfo($"{nameof(HeliCrashPacket)}:{loot_result}");
+            StayInTarkovHelperConstants.Logger.LogInfo($"{nameof(HeliCrashPacket)}: Loot Json Generated");
             writer.Write(LootResult.ToJson());
             
             
@@ -53,11 +53,12 @@ namespace SamSWAT.HeliCrash.ArysReloaded
             using var reader = new BinaryReader(new MemoryStream(bytes));
             ReadHeaderAndProfileId(reader);
 
-            Location = reader.ReadString();
+            var location_json = reader.ReadString();
+            Location = JsonConvert.DeserializeObject<ArysReloaded.Location>(location_json);
             StayInTarkovHelperConstants.Logger.LogInfo($"{nameof(HeliCrashPacket)}:{Location} is set");
             
             var  loot_json = reader.ReadString();
-            StayInTarkovHelperConstants.Logger.LogInfo($"{nameof(HeliCrashPacket)}:{loot_json} has been received");
+            StayInTarkovHelperConstants.Logger.LogInfo($"{nameof(HeliCrashPacket)}: loot json has been received");
     
             LootResult = JsonConvert.DeserializeObject<AirdropLootResultModel>(loot_json);
             StayInTarkovHelperConstants.Logger.LogInfo($"{nameof(HeliCrashPacket)}: Has deserialized the loot model");
@@ -77,7 +78,7 @@ namespace SamSWAT.HeliCrash.ArysReloaded
             }
                 
             StayInTarkovHelperConstants.Logger.LogInfo($"{nameof(HeliCrashPacket)}: setting up crash site");
-            await HeliCrashHelper.Init(Location, LootResult);
+            await HeliCrashHelper.Init(client.Location, LootResult, Location);
         }
     }
     
