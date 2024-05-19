@@ -1,9 +1,15 @@
-﻿using Aki.Reflection.Patching;
-using EFT;
+﻿using EFT;
 using EFT.Airdrop;
 using HarmonyLib;
 using System.Linq;
 using System.Reflection;
+using Comfort.Common;
+using StayInTarkov;
+using StayInTarkov.Coop.Matchmaker;
+using StayInTarkov.Coop.SITGameModes;
+using StayInTarkov.Networking;
+using UnityEngine;
+using ModulePatch = Aki.Reflection.Patching.ModulePatch;
 
 namespace SamSWAT.HeliCrash.ArysReloaded
 {
@@ -11,20 +17,34 @@ namespace SamSWAT.HeliCrash.ArysReloaded
     {
         protected override MethodBase GetTargetMethod()
         {
-            return AccessTools.Method(typeof(GameWorld), nameof(GameWorld.OnGameStarted));
+            return typeof(CoopSITGame).GetMethod("CreateExfiltrationPointAndInitDeathHandler", BindingFlags.Public | BindingFlags.Instance);
         }
 
-        [PatchPostfix]
-        public static void PatchPostfix(GameWorld __instance)
+        [Aki.Reflection.Patching.PatchPostfix]
+        public static async void PatchPostfix()
         {
-            var gameWorld = __instance;
-            var crashAvailable = __instance.MainPlayer.Location.ToLower() == "sandbox" || LocationScene.GetAll<AirdropPoint>().Any();
-            var location = gameWorld.MainPlayer.Location;
             
-            if (!crashAvailable || !BlessRNG.RngBool(Plugin.HeliCrashChance.Value)) return;
-            
-            var heliCrash = gameWorld.gameObject.AddComponent<HeliCrash>();
-            heliCrash.Init(location);
+            if (SITMatchmaking.IsClient)
+            {
+                // is normal client. Let host decide where the helicopter spawns
+                StayInTarkovHelperConstants.Logger.LogInfo("Waiting on Host to generate Helicopter crash");
+            }
+            else
+            {
+                // generate helicopter crash
+                StayInTarkovHelperConstants.Logger.LogInfo("Generating Helicopter Crash (if possible)");
+                var generated_results = await HeliCrashHelper.Init(Singleton<GameWorld>.Instance.MainPlayer.Location, null, null);
+
+                if (generated_results != null)
+                {
+                  
+                    StayInTarkovHelperConstants.Logger.LogInfo("Sending Helicrash Packet");
+                    var packet = new HeliCrashPacket(Singleton<GameWorld>.Instance.MainPlayer.ProfileId);
+                    packet.Location = generated_results.Item1;
+                    packet.LootResult = generated_results.Item2;
+                    GameClient.SendData(packet.Serialize());
+                }
+            }
         }
     }
 }

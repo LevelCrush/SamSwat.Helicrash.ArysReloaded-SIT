@@ -1,4 +1,5 @@
-﻿using Aki.Custom.Airdrops.Models;
+﻿using System;
+using Aki.Custom.Airdrops.Models;
 using Aki.Custom.Airdrops.Utils;
 using Comfort.Common;
 using EFT;
@@ -6,6 +7,9 @@ using EFT.Interactive;
 using EFT.UI;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using HarmonyLib;
+using StayInTarkov.AkiSupport.Airdrops;
+using StayInTarkov.Coop.Components.CoopGameComponents;
 using UnityEngine;
 
 namespace SamSWAT.HeliCrash.ArysReloaded
@@ -14,9 +18,9 @@ namespace SamSWAT.HeliCrash.ArysReloaded
     {
         private AssetBundle _heliBundle;
 
-        public async void Init(string location)
+        public async Task<Tuple<Location, AirdropLootResultModel>> Init(string location,AirdropLootResultModel target_loot_result, Location heli_location)
         {
-            var heliLocation = GetHeliCrashLocation(location);
+            var heliLocation = heli_location == null ? GetHeliCrashLocation(location) : heli_location;
 #if DEBUG
             ConsoleScreen.Log($"Heli crash site spawned at position x: {heliLocation.Position.x}, y: {heliLocation.Position.y}, z: {heliLocation.Position.z}");
 #endif
@@ -24,10 +28,16 @@ namespace SamSWAT.HeliCrash.ArysReloaded
             var container = choppa.GetComponentInChildren<LootableContainer>();
 
             var itemFactoryUtil = new ItemFactoryUtil();
-            AirdropLootResultModel lootResult = itemFactoryUtil.GetLoot();
+            var lootResult = target_loot_result == null ? await itemFactoryUtil.GetLoot() : target_loot_result;
             var itemCrate = Singleton<ItemFactory>.Instance.CreateItem("goofyahcontainer", "6223349b3136504a544d1608", null);
             LootItem.CreateLootContainer(container, itemCrate, "Heavy crate", Singleton<GameWorld>.Instance);
             itemFactoryUtil.AddLoot(container, lootResult);
+            
+            if (SITGameComponent.TryGetCoopGameComponent(out var coopGameComponent))
+            {
+                coopGameComponent.ListOfInteractiveObjects.AddItem(container);
+            }
+            return new Tuple<Location, AirdropLootResultModel>(heliLocation, lootResult);
         }
 
         private void OnDestroy()
