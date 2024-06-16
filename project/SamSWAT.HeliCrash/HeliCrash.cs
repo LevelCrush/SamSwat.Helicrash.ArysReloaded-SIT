@@ -35,7 +35,10 @@ namespace SamSWAT.HeliCrash.ArysReloaded
             
             if (SITGameComponent.TryGetCoopGameComponent(out var coopGameComponent))
             {
-                coopGameComponent.ListOfInteractiveObjects.AddItem(container);
+                 // coopGameComponent.ListOfInteractiveObject
+                //coopGameComponent.ListOfInteractiveObjects.AddItem(container);
+
+                coopGameComponent.WorldnteractiveObjects.TryAdd("goofyahcontainer", container);
             }
             return new Tuple<Location, AirdropLootResultModel>(heliLocation, lootResult);
         }
