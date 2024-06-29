@@ -1,9 +1,13 @@
-﻿using BepInEx;
+﻿using System;
+using System.Collections.Generic;
+using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using Newtonsoft.Json;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using StayInTarkov;
 
 namespace SamSWAT.HeliCrash.ArysReloaded
 {
@@ -19,7 +23,7 @@ namespace SamSWAT.HeliCrash.ArysReloaded
         {
             LogSource = Logger;
             Directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            new HeliCrashPacketPatch().Enable();
+            
             new HeliCrashPatch().Enable();
             var json = File.ReadAllText($"{Directory}/HeliCrashLocations.json");
             HeliCrashLocations = JsonConvert.DeserializeObject<HeliCrashLocations>(json);
@@ -30,6 +34,19 @@ namespace SamSWAT.HeliCrash.ArysReloaded
                 10,
                 new ConfigDescription("Percent chance of helicopter crash site appearance",
                 new AcceptableValueRange<int>(0, 100)));
+            
+            // Patch network packet in
+            
+            StayInTarkovHelperConstants.Logger.LogInfo($"Trying to patch in {nameof(HeliCrashPacket)}");
+            var sit_types =
+                typeof(StayInTarkovHelperConstants).GetField("_sitTypes", BindingFlags.Static | BindingFlags.NonPublic);
+           
+            StayInTarkovHelperConstants.Logger.LogInfo($"Helicrash is patching in {nameof(HeliCrashPacket)}");
+            var new_types = new List<Type>();
+            new_types.Add(typeof(HeliCrashPacket));
+            var merged = StayInTarkovHelperConstants.SITTypes.Union(new_types).ToArray();
+            sit_types.SetValue(null, merged);
+            StayInTarkovHelperConstants.Logger.LogInfo($"Helicrash is finished patching {nameof(HeliCrashPacket)}");
         }
     }
 }

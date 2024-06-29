@@ -68,7 +68,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HeliCrash.cs" />
-    <Compile Include="HeliCrashPacketPatch.cs" />
     <Compile Include="HeliCrashPatch.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
