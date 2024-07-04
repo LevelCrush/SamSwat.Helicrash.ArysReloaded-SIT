@@ -52,6 +52,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\SIT-Dependencies\EscapeFromTarkov_Data\Managed\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="SIT.NetworkPacketAPI">
+      <HintPath>..\..\..\SIT-Dependencies\BepInEx\plugins\SIT.NetworkPacketAPI.dll</HintPath>
+    </Reference>
     <Reference Include="StayInTarkov">
       <HintPath>..\..\..\SIT-Dependencies\BepInEx\plugins\StayInTarkov.dll</HintPath>
     </Reference>
